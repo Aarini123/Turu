@@ -40,5 +40,11 @@ localStorage.setItem("room_name",name);
 window.location="turu_chat.html";
 }
 
+function Log_out(){
+      localStorage.removeItem("user");
+      localStorage.removeItem("room_name");
+      window.location.replace("index.html");
+  }
+
 
 
