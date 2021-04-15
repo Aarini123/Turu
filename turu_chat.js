@@ -11,17 +11,19 @@ var firebaseConfig = {
   };
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
-function getData() { firebase.database().ref("/"+roomName).on('value', function(snapshot) { document.getElementById("output").innerHTML = ""; snapshot.forEach(function(childSnapshot) { childKey  = childSnapshot.key; childData = childSnapshot.val(); if(childKey != "purpose") {
-       firebase_message_id = childKey;
-       message_data = childData;
-       firebase.database().ref(room_name).push({
-        name:userName,
-        msg:message,
-        like:0
+  var userName=localStorage.getItem("user");
+  var roomName=localStorage.getItem("room_name");
+  function send(){
+      var message=document.getElementById("send_input").value;
+  firebase.database().ref(roomName).push({
+      name:userName,
+      msg:message,
+      like:0
   });
-  document.getElementById("chat_input").value="";
+  document.getElementById("send_input").value="";
   }
-  function getData() { firebase.database().ref("/"+room_name).on('value', function(snapshot) { document.getElementById("output").innerHTML = ""; snapshot.forEach(function(childSnapshot) { childKey  = childSnapshot.key; childData = childSnapshot.val(); if(childKey != "purpose") {
+
+  function getData() { firebase.database().ref("/"+roomName).on('value', function(snapshot) { document.getElementById("output").innerHTML = ""; snapshot.forEach(function(childSnapshot) { childKey  = childSnapshot.key; childData = childSnapshot.val(); if(childKey != "purpose") {
            firebase_message_id = childKey;
            message_data = childData;
   //Start code
@@ -43,14 +45,17 @@ function LogOut(){
     localStorage.removeItem("room_name");
     window.location.replace("index.html");
 }
-var userName=localStorage.getItem("user");
-var roomName=localStorage.getItem("room_name");
-function send(){
-    var message=document.getElementById("send_input").value;
-firebase.database().ref(roomName).push({
-    name:userName,
-    msg:message,
-    like:0
-});
-document.getElementById("send_input").value="";
+
+function updateLike(message_id)
+{
+  console.log("clicked on like button - " + message_id);
+	button_id = message_id;
+	likes = document.getElementById(button_id).value;
+	updated_likes = Number(likes) + 1;
+	console.log(updated_likes);
+
+	firebase.database().ref(roomName).child(message_id).update({
+		like : updated_likes  
+	 });
+
 }
